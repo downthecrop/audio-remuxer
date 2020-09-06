@@ -22,7 +22,7 @@ build_exe_options = {
     }
         
 target = Executable(
-    script="ffmpeg-remux-audio.py",
+    script="audio-remuxer.py",
     icon="lib\icon.ico"
     )
 
