@@ -11,9 +11,14 @@
 ### Instructions
 
 - **Windows**
-	- Download release and extract
-	- Set up input/output directoires and audio channel in settings.cfg
+	- Download <a href="https://github.com/downthecrop/audio-remuxer/releases/"><b>release</b></a> and extract
+	- Set up input/output directories and audio channel in settings.cfg
 	- Run Audio-Remux.exe
+- **Linux**
+	- Download <b>repo</b> and extract
+	- Install FFmpeg & Python3.8 for your system and set binary location in settings.cfg
+	- Set up input/output directories and audio channel in settings.cfg
+	- Run `python audio-remuxer.py`
 
 
 **Development Requirements**
@@ -21,14 +26,16 @@
 - Python 3.8
 - cx_freeze for building .exe's for distribution
 
-## FAQ/Info
+## FAQ/Info/Options
 
-	- Will populate later
+	- ffmpeg       | custom ffmpeg binary location
+	- deletemkv    | Remove any mkv files with the same input name (OBS remux cleanup)
+	- batchMode    | Run for each file in the input directory (defaults to the latest mp4)
 
 - **Blog Post**
-	- <a href="https://downthecrop.xyz/blog/jailbreak-ios-device-with-android-phone-checkra1n-twrp-app/">https://downthecrop.xyz/blog/jailbreak-ios-device-with-android-phone-checkra1n-twrp-app/</a>
+	- 
 - **Demo/Tutorial Video**
-	- <a href="https://www.youtube.com/watch?v=eIRkph1XfM0">https://www.youtube.com/watch?v=eIRkph1XfM0</a>
+	- 
 
 
 ## Support
@@ -42,5 +49,5 @@ I will not respond to errors or problems on Twitter but you should still follow 
 
 ## License
 
-- BSD Zero Clause <a href="https://github.com/downthecrop/checkra1n-twrp/blob/master/LICENSE">LICENSE</a>
+- BSD Zero Clause (Python Code, FFmpeg is GPL) <a href="https://github.com/downthecrop/audio-remuxer/blob/master/LICENSE">LICENSE</a>
 - Copyright 2020 © <a href="https://downthecrop.xyz/" target="_blank">downthecrop</a>.
