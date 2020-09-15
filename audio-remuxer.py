@@ -10,7 +10,7 @@ def get_cfg(key):
 def get_paths():
     files = [f for f in os.listdir(inDir) if os.path.isfile(os.path.join(inDir, f))]
     paths = [os.path.join(inDir, basename) for basename in files]
-    paths = [x for x in paths if ".mp4" in x]
+    paths = [x for x in paths if videoFormat in x]
     return paths
     
 def exec_remux(inFile, outFile):
@@ -38,11 +38,22 @@ encodePreset = get_cfg('encodePreset')
 audioChannel = get_cfg('audioChannel')
 deletemkv    = get_cfg('deletemkv')
 batchMode    = get_cfg('batchMode')
+videoFormat  = get_cfg('videoFormat')
 
 #Default FFmpeg to included binary
 if not ffmpeg:
     path = os.path.dirname(os.path.realpath(__file__))
     ffmpeg = path+"\\lib\\ffmpeg.exe"
+    
+#Default format to mp4
+if not videoFormat:
+    videoFormat = ".mp4"
+
+#Make sure inDir and outDir end with a backslash
+if inDir[-1:] != "\\":
+    inDir += "\\"
+if outDir[-1:] != "\\":
+    outDir += "\\"
 
 #Remux
 if batchMode == 'True':
