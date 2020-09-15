@@ -50,10 +50,8 @@ if not videoFormat:
     videoFormat = ".mp4"
 
 #Make sure inDir and outDir end with a backslash
-if inDir[-1:] != "\\":
-    inDir += "\\"
-if outDir[-1:] != "\\":
-    outDir += "\\"
+if inDir[-1:] != "\\": inDir += "\\"
+if outDir[-1:] != "\\": outDir += "\\"
 
 #Remux
 if batchMode == 'True':
