@@ -3,9 +3,12 @@ import configparser
 
 def get_cfg(key):
     config = configparser.ConfigParser()
-    config.read('settings.cfg')
-    val = config.get('SETTINGS',key,raw=True)
-    return val.strip('"')
+    try:
+        config.read('settings.cfg')
+        val = config.get('SETTINGS',key,raw=True)
+        return val.strip('"')
+    except:
+        print("Error in '"+key+"' setting")
 
 def get_paths():
     files = [f for f in os.listdir(inDir) if os.path.isfile(os.path.join(inDir, f))]

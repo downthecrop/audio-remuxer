@@ -14,12 +14,11 @@
 	- Download <a href="https://github.com/downthecrop/audio-remuxer/releases/"><b>release</b></a> and extract
 	- Set up input/output directories and audio channel in settings.cfg
 	- Run Audio-Remux.exe
-- **Linux**
+- **Linux/macOS**
 	- Download <b>repo</b> and extract
-	- Install FFmpeg & Python3.8 for your system and set binary location in settings.cfg
+	- Install FFmpeg & Python3.8 for your system and set binary location (or just ffmpeg no extension) in settings.cfg
 	- Set up input/output directories and audio channel in settings.cfg
 	- Run `python audio-remuxer.py`
-
 
 **Development Requirements**
 
@@ -28,7 +27,13 @@
 
 ## FAQ/Info/Options
 
-	- ffmpeg       | custom ffmpeg binary location
+	- inDir        | Directory for input files
+	- outDir       | Directory for output files
+	- ffmpeg       | ffmpeg binary to execute
+	- outPrefix    | Prepended to the file name for output
+	- encodePreset | ffmpeg encoder preset (slow,fast,veryslow ect)
+	- audioChannel | Audio channel to include in remuxed mp4
+	- videoFormat  | File extension for input files
 	- deletemkv    | Remove any mkv files with the same input name (OBS remux cleanup)
 	- batchMode    | Run for each file in the input directory (defaults to the latest mp4)
 
