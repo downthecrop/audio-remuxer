@@ -1,5 +1,4 @@
-import os
-import configparser
+import os,sys,configparser
 
 def get_cfg(key):
     config = configparser.ConfigParser()
@@ -53,11 +52,20 @@ if not videoFormat:
     videoFormat = ".mp4"
 
 #Make sure inDir and outDir end with a backslash
-if inDir[-1:] != "\\": inDir += "\\"
-if outDir[-1:] != "\\": outDir += "\\"
+if (inDir and outDir):
+    if inDir[-1:] != "\\": inDir += "\\"
+    if outDir[-1:] != "\\": outDir += "\\"
 
 #Remux
-if batchMode == 'True':
+if (len(sys.argv)>=2 and outDir):
+    i = 1 #arg0 is .exe/.py
+    while (i <= len(sys.argv)):
+        inFile = sys.argv[i] #Dragged on files
+        outName = inFile.rsplit('\\')[::-1][0]
+        outFile = outDir+outPrefix+outName
+        exec_remux(inFile,outFile)
+        i+=1
+elif (batchMode == 'True'):
     for f in get_paths():
         inFile = f
         outFile = outDir+outPrefix+os.path.basename(inFile)
