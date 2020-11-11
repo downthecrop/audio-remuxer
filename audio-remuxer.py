@@ -3,10 +3,11 @@ import os,sys,configparser
 def get_cfg(key):
     config = configparser.ConfigParser()
     try:
-        config.read('settings.cfg')
+        config.read(dir_+'/settings.cfg')
         val = config.get('SETTINGS',key,raw=True)
         return val.strip('"')
-    except:
+    except Exception as e:
+        print(e)
         print("Error in '"+key+"' setting")
 
 def get_paths():
@@ -31,6 +32,13 @@ def exec_remux(inFile, outFile):
         except:
             print("\033[95mUnable to delete MKV Source: "+mkv+"\033[0m")
 
+
+#Program context for running directory
+if getattr(sys, 'frozen', False):
+    dir_ = os.path.dirname(sys.executable)
+else:
+    dir_ = os.path.dirname(os.path.realpath(__file__))
+
 #Load settings from settings.cfg
 inDir        = get_cfg('inDir')
 outDir       = get_cfg('outDir')
@@ -44,8 +52,7 @@ videoFormat  = get_cfg('videoFormat')
 
 #Default FFmpeg to included binary
 if not ffmpeg:
-    path = os.path.dirname(os.path.realpath(__file__))
-    ffmpeg = path+"\\lib\\ffmpeg.exe"
+    ffmpeg = dir_+"\\lib\\ffmpeg.exe"
     
 #Default format to mp4
 if not videoFormat:
