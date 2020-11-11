@@ -68,8 +68,7 @@ if (len(sys.argv)>=2 and outDir):
     i = 1 #arg0 is .exe/.py
     while (i <= len(sys.argv)):
         inFile = sys.argv[i] #Dragged on files
-        outName = inFile.rsplit('\\')[::-1][0]
-        outFile = outDir+outPrefix+outName
+        outFile = outDir+outPrefix+os.path.basename(inFile)
         exec_remux(inFile,outFile)
         i+=1
 elif (batchMode == 'True'):
