@@ -1,86 +1,98 @@
-import os,sys,configparser
+import os
+import sys
+import configparser
+
 
 def get_cfg(key):
     config = configparser.ConfigParser()
     try:
         config.read(dir_+'/settings.cfg')
-        val = config.get('SETTINGS',key,raw=True)
-        return val.strip('"')
+        val = config.get('SETTINGS', key, raw=True)
+        val = val.strip('"')
+        return val
     except Exception as e:
         print(e)
         print("Error in '"+key+"' setting")
 
+
 def get_paths():
-    files = [f for f in os.listdir(inDir) if os.path.isfile(os.path.join(inDir, f))]
-    paths = [os.path.join(inDir, basename) for basename in files]
-    paths = [x for x in paths if videoFormat in x]
+    files = [f for f in os.listdir(in_dir)
+             if os.path.isfile(os.path.join(in_dir, f))]
+    paths = [os.path.join(in_dir, basename) for basename in files]
+    paths = [x for x in paths if video_format in x]
     return paths
-    
-def exec_remux(inFile, outFile):
-    #https://trac.ffmpeg.org/wiki/Map
+
+
+def exec_remux(in_file, out_file):
+    # https://trac.ffmpeg.org/wiki/Map
     cmd = '{} -i "{}" -map 0:0 -map 0:{} -c:a copy\
            -c:v copy -preset {} -f mp4 "{}"'
 
-    cmd = cmd.format(ffmpeg,inFile,audioChannel,encodePreset,outFile)
+    cmd = cmd.format(ffmpeg, in_file, audio_channel, encode_preset, out_file)
 
     os.system("{}".format(cmd))
 
-    if deletemkv == 'True':
-        mkv = inFile.replace(".mp4",".mkv")
+    if delete_mkv == 'True':
+        mkv = in_file.replace(".mp4", ".mkv")
         try:
             os.remove(mkv)
-        except:
+        except OSError:
             print("\033[95mUnable to delete MKV Source: "+mkv+"\033[0m")
 
 
-#Program context for running directory
+# Program context for running directory
 if getattr(sys, 'frozen', False):
     dir_ = os.path.dirname(sys.executable)
 else:
     dir_ = os.path.dirname(os.path.realpath(__file__))
 
-#Load settings from settings.cfg
-inDir        = get_cfg('inDir')
-outDir       = get_cfg('outDir')
-outPrefix    = get_cfg('outPrefix')
-ffmpeg       = get_cfg('ffmpeg')
-encodePreset = get_cfg('encodePreset')
-audioChannel = get_cfg('audioChannel')
-deletemkv    = get_cfg('deletemkv')
-batchMode    = get_cfg('batchMode')
-videoFormat  = get_cfg('videoFormat')
+# Load settings from settings.cfg
+in_dir = get_cfg('in_dir')
+out_dir = get_cfg('out_dir')
+out_prefix = get_cfg('out_prefix')
+ffmpeg = get_cfg('ffmpeg')
+encode_preset = get_cfg('encode_preset')
+audio_channel = get_cfg('audio_channel')
+delete_mkv = get_cfg('delete_mkv')
+batch_mode = get_cfg('batch_mode')
+video_format = get_cfg('video_format')
 
-#Default FFmpeg to included binary
+# Default FFmpeg to included binary
 if not ffmpeg:
     ffmpeg = dir_+"\\lib\\ffmpeg.exe"
-    
-#Default format to mp4
-if not videoFormat:
-    videoFormat = ".mp4"
 
-#Make sure inDir and outDir end with a backslash
-if (inDir and outDir):
-    if inDir[-1:] != "\\": inDir += "\\"
-    if outDir[-1:] != "\\": outDir += "\\"
+# Default format to mp4
+if not video_format:
+    video_format = ".mp4"
 
-#Remux
-if (len(sys.argv)>=2 and outDir):
-    i = 1 #arg0 is .exe/.py
+# Make sure in_dir and out_dir end with a backslash
+if (in_dir and out_dir):
+    if in_dir[-1:] != "\\":
+        in_dir += "\\"
+    if out_dir[-1:] != "\\":
+        out_dir += "\\"
+
+# Begin Remux
+if (len(sys.argv) >= 2 and out_dir):
+    # arg0 is .exe/.py
+    i = 1
     while (i <= len(sys.argv)):
-        inFile = sys.argv[i] #Dragged on files
-        outFile = outDir+outPrefix+os.path.basename(inFile)
-        exec_remux(inFile,outFile)
-        i+=1
-elif (batchMode == 'True'):
-    for f in get_paths():
-        inFile = f
-        outFile = outDir+outPrefix+os.path.basename(inFile)
-        exec_remux(inFile,outFile)
+        # Dragged on files
+        in_file = sys.argv[i]
+        out_file = out_dir+out_prefix+os.path.basename(in_file)
+        exec_remux(in_file, out_file)
+        i += 1
+elif (batch_mode == 'True'):
+    for file in get_paths():
+        in_file = file
+        out_file = out_dir+out_prefix+os.path.basename(in_file)
+        exec_remux(in_file, out_file)
 else:
     try:
-        inFile  = max(get_paths(), key=os.path.getctime) #Latest mp4
-        outFile = outDir+outPrefix+os.path.basename(inFile)
-        exec_remux(inFile,outFile)
-    except:
+        # Latest mp4
+        in_file = max(get_paths(), key=os.path.getctime)
+        out_file = out_dir+out_prefix+os.path.basename(in_file)
+        exec_remux(in_file, out_file)
+    except OSError:
         print("Please configure in and out directories in settings.cfg")
         input("Press ENTER to close this window.")
